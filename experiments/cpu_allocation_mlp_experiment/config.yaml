@@ -1,0 +1,46 @@
+data:
+  batch_size: 32
+  n_features: 10
+  n_samples: 10000
+  noise_level: 0.1
+  normalize: true
+  num_workers: 0
+  sequence_length: null
+  source: synthetic
+  test_ratio: 0.15
+  train_ratio: 0.7
+  val_ratio: 0.15
+device: cpu
+evaluation:
+  benchmark_runs: 100
+  cv_epochs: 20
+  feature_importance_method: gradient
+experiment_name: cpu_allocation_mlp_experiment
+log_level: INFO
+model:
+  activation: relu
+  allocation_type: percentage
+  dropout_rate: 0.1
+  hidden_dims:
+  - 128
+  - 64
+  - 32
+  input_dim: 10
+  learning_rate: 0.001
+  max_cpu_cores: 16
+  name: cpu_allocation_mlp
+  output_dim: 1
+  weight_decay: 1.0e-05
+output_dir: experiments
+task_type: regression
+training:
+  early_stopping_patience: 15
+  epochs: 100
+  gradient_clip_val: null
+  save_every: 10
+  scheduler:
+    params:
+      gamma: 0.1
+      step_size: 30
+    type: StepLR
+  validate_every: 1

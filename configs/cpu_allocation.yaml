@@ -1,0 +1,53 @@
+# CPU Allocation Model Configuration
+
+experiment_name: "cpu_allocation_mlp_experiment"
+task_type: "regression"
+device: "cpu"  # Change to "cuda" if GPU is available
+output_dir: "experiments"
+log_level: "INFO"
+
+# Data Configuration
+data:
+  source: "synthetic"  # Can be "synthetic" or path to data file
+  n_samples: 10000
+  n_features: 10
+  sequence_length: null  # Set to integer for temporal models (LSTM/Transformer)
+  noise_level: 0.1
+  normalize: true
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  batch_size: 32
+  num_workers: 0
+
+# Model Configuration
+model:
+  name: "cpu_allocation_mlp"  # Options: cpu_allocation_mlp, cpu_allocation_lstm, cpu_allocation_transformer
+  input_dim: 10
+  hidden_dims: [128, 64, 32]
+  output_dim: 1
+  dropout_rate: 0.1
+  activation: "relu"  # Options: relu, leaky_relu, tanh, gelu
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  allocation_type: "percentage"  # Options: percentage, cores
+  max_cpu_cores: 16
+
+# Training Configuration
+training:
+  epochs: 100
+  save_every: 10
+  validate_every: 1
+  early_stopping_patience: 15
+  gradient_clip_val: null  # Set to float value to enable gradient clipping
+  scheduler:
+    type: "StepLR"  # Options: StepLR, ExponentialLR, CosineAnnealingLR
+    params:
+      step_size: 30
+      gamma: 0.1
+
+# Evaluation Configuration
+evaluation:
+  cv_epochs: 20
+  benchmark_runs: 100
+  feature_importance_method: "gradient"  # Options: gradient, integrated_gradients

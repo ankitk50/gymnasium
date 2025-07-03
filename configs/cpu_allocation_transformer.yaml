@@ -1,0 +1,55 @@
+# CPU Allocation Transformer Model Configuration
+
+experiment_name: "cpu_allocation_transformer_experiment"
+task_type: "regression"
+device: "cpu"
+output_dir: "experiments"
+log_level: "INFO"
+
+# Data Configuration
+data:
+  source: "synthetic"
+  n_samples: 15000
+  n_features: 10
+  sequence_length: 20  # Required for Transformer model
+  noise_level: 0.05
+  normalize: true
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  batch_size: 16  # Smaller batch size for Transformer
+  num_workers: 0
+
+# Model Configuration
+model:
+  name: "cpu_allocation_transformer"
+  input_dim: 10
+  model_dim: 128
+  num_heads: 8
+  num_layers: 4
+  ff_dim: 512
+  output_dim: 1
+  max_seq_length: 100
+  dropout_rate: 0.1
+  learning_rate: 0.0001  # Lower learning rate for Transformer
+  weight_decay: 0.0001
+  allocation_type: "percentage"
+  max_cpu_cores: 16
+
+# Training Configuration
+training:
+  epochs: 200
+  save_every: 20
+  validate_every: 1
+  early_stopping_patience: 25
+  gradient_clip_val: 1.0
+  scheduler:
+    type: "CosineAnnealingLR"
+    params:
+      T_max: 200
+
+# Evaluation Configuration
+evaluation:
+  cv_epochs: 40
+  benchmark_runs: 100
+  feature_importance_method: "gradient"

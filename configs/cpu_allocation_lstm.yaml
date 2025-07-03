@@ -1,0 +1,52 @@
+# CPU Allocation LSTM Model Configuration
+
+experiment_name: "cpu_allocation_lstm_experiment"
+task_type: "regression"
+device: "cpu"
+output_dir: "experiments"
+log_level: "INFO"
+
+# Data Configuration
+data:
+  source: "synthetic"
+  n_samples: 10000
+  n_features: 10
+  sequence_length: 10  # Required for LSTM model
+  noise_level: 0.1
+  normalize: true
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  batch_size: 32
+  num_workers: 0
+
+# Model Configuration
+model:
+  name: "cpu_allocation_lstm"
+  input_dim: 10
+  hidden_dim: 64
+  num_layers: 2
+  output_dim: 1
+  dropout_rate: 0.1
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  allocation_type: "percentage"
+  max_cpu_cores: 16
+
+# Training Configuration
+training:
+  epochs: 150
+  save_every: 15
+  validate_every: 1
+  early_stopping_patience: 20
+  gradient_clip_val: 1.0  # Important for RNNs
+  scheduler:
+    type: "ExponentialLR"
+    params:
+      gamma: 0.95
+
+# Evaluation Configuration
+evaluation:
+  cv_epochs: 30
+  benchmark_runs: 100
+  feature_importance_method: "gradient"
