@@ -8,8 +8,10 @@ import torch
 import wandb
 import os
 
-# Add src to path
-sys.path.append(str(Path(__file__).parent.parent / 'src'))
+# Add parent directory to path so we can import from src
+parent_dir = Path(__file__).parent.parent.resolve()
+if str(parent_dir) not in sys.path:
+    sys.path.insert(0, str(parent_dir))
 
 from src.core.pipeline import TrainingPipeline
 from src.utils.config import create_default_config

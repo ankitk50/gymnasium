@@ -3,7 +3,8 @@ experiments/
 logs/
 results/
 runs/
-
+.env
+.venv
 # WandB data
 wandb/
 
