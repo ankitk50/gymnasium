@@ -16,7 +16,7 @@ A generic, reusable training pipeline framework for machine learning and deep le
 
 ```
 gymnasium/
-├── src/
+├── src/                        # Core framework source code
 │   ├── core/                   # Core framework components
 │   │   ├── pipeline.py         # Main training pipeline
 │   │   ├── base_model.py       # Base model interface
@@ -37,9 +37,19 @@ gymnasium/
 │       ├── metrics.py          # Custom metrics
 │       └── logging.py          # Logging utilities
 ├── configs/                    # Configuration files
-├── data/                       # Dataset storage
-├── experiments/                # Experiment outputs
-└── notebooks/                  # Jupyter notebooks for analysis
+├── docs/                       # Documentation
+│   ├── DEMO_SUMMARY.md         # Demo overview
+│   ├── QUICKSTART.md           # Quick start guide
+│   └── WANDB_SETUP_COMPLETE.md # WandB setup guide
+├── wandb_integration/          # Weights & Biases integration
+│   ├── setup_wandb_server.py   # WandB server setup
+│   ├── train_with_wandb.py     # Training with WandB
+│   └── ...                     # Other WandB utilities
+├── notebooks/                  # Jupyter notebooks for analysis
+├── experiments/                # Experiment outputs (gitignored)
+├── logs/                       # Training logs (gitignored)
+├── results/                    # Results data (gitignored)
+└── wandb/                      # WandB data (gitignored)
 ```
 
 ## Quick Start
@@ -58,6 +68,25 @@ python src/main.py --config-name=cpu_allocation
 ```bash
 tensorboard --logdir experiments/
 ```
+
+For more detailed setup instructions, see `docs/QUICKSTART.md`.
+
+## Documentation
+
+Complete documentation is available in the `docs/` folder:
+- `docs/QUICKSTART.md` - Detailed setup and usage guide
+- `docs/DEMO_SUMMARY.md` - Overview of demo features
+- `docs/WANDB_SETUP_COMPLETE.md` - Weights & Biases integration guide
+
+## Weights & Biases Integration
+
+WandB integration code is organized in the `wandb_integration/` folder. This includes:
+- Training scripts with WandB logging
+- Visualization utilities
+- Server setup and configuration
+- Demo examples
+
+See `wandb_integration/README.md` for detailed information.
 
 ## Usage
 

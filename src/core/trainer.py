@@ -13,6 +13,13 @@ from pathlib import Path
 from tqdm import tqdm
 import logging
 
+# Wandb integration (optional)
+try:
+    import wandb
+    WANDB_AVAILABLE = True
+except ImportError:
+    WANDB_AVAILABLE = False
+
 from .base_model import BaseModel
 from ..utils.metrics import MetricsTracker
 from ..visualization.training_viz import TrainingVisualizer
@@ -28,7 +35,8 @@ class Trainer:
                  train_loader: DataLoader,
                  val_loader: Optional[DataLoader] = None,
                  config: Optional[Dict[str, Any]] = None,
-                 logger: Optional[logging.Logger] = None):
+                 logger: Optional[logging.Logger] = None,
+                 use_wandb: bool = False):
         """
         Initialize the trainer.
         
@@ -38,12 +46,20 @@ class Trainer:
             val_loader: Validation data loader (optional)
             config: Training configuration
             logger: Logger instance
+            use_wandb: Whether to use Weights & Biases for logging
         """
         self.model = model
         self.train_loader = train_loader
         self.val_loader = val_loader
         self.config = config or {}
         self.logger = logger or logging.getLogger(__name__)
+        
+        # Wandb integration
+        self.use_wandb = use_wandb and WANDB_AVAILABLE
+        if self.use_wandb:
+            # Watch model with wandb
+            wandb.watch(self.model, log_freq=100)
+            self.logger.info("Wandb integration enabled")
         
         # Training parameters
         self.epochs = self.config.get('epochs', 100)
@@ -226,6 +242,15 @@ class Trainer:
         training_time = time.time() - start_time
         self.logger.info(f"Training completed in {training_time:.2f} seconds")
         
+        # Log final metrics to wandb
+        if self.use_wandb:
+            final_metrics = {
+                "training_time_seconds": training_time,
+                "total_epochs": self.current_epoch + 1,
+                "best_val_loss": self.best_val_loss
+            }
+            wandb.log(final_metrics)
+        
         return self.model
     
     def _should_early_stop(self, val_loss: float) -> bool:
@@ -265,6 +290,16 @@ class Trainer:
         log_str += f"LR: {self.optimizer.param_groups[0]['lr']:.6f}"
         
         self.logger.info(log_str)
+        
+        # Log to wandb if enabled
+        if self.use_wandb:
+            wandb_log = {
+                "epoch": epoch,
+                "learning_rate": self.optimizer.param_groups[0]['lr'],
+                **{f"train_{k}": v for k, v in train_metrics.items()},
+                **{f"val_{k}": v for k, v in val_metrics.items()}
+            }
+            wandb.log(wandb_log)
     
     def _save_checkpoint(self, epoch: int, train_metrics: Dict[str, float], 
                         val_metrics: Dict[str, float], is_final: bool = False) -> None:

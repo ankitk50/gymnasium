@@ -9,6 +9,13 @@ from typing import Dict, Any, Optional, Union
 import torch
 from torch.utils.data import DataLoader
 
+# Wandb integration (optional)
+try:
+    import wandb
+    WANDB_AVAILABLE = True
+except ImportError:
+    WANDB_AVAILABLE = False
+
 from .base_model import BaseModel
 from .trainer import Trainer
 from .evaluator import Evaluator
@@ -34,7 +41,9 @@ class TrainingPipeline:
     def __init__(self, 
                  config_path: Optional[Union[str, Path]] = None,
                  config_dict: Optional[Dict[str, Any]] = None,
-                 experiment_name: Optional[str] = None):
+                 experiment_name: Optional[str] = None,
+                 use_wandb: bool = False,
+                 wandb_project: Optional[str] = None):
         """
         Initialize the training pipeline.
         
@@ -42,6 +51,8 @@ class TrainingPipeline:
             config_path: Path to configuration file
             config_dict: Configuration dictionary (alternative to config_path)
             experiment_name: Name for this experiment
+            use_wandb: Whether to use Weights & Biases for logging
+            wandb_project: Wandb project name
         """
         # Load configuration
         if config_path:
@@ -53,6 +64,15 @@ class TrainingPipeline:
         
         # Set experiment name
         self.experiment_name = experiment_name or self.config.get('experiment_name', 'default_experiment')
+        
+        # Setup wandb if requested
+        self.use_wandb = use_wandb and WANDB_AVAILABLE
+        if self.use_wandb:
+            wandb.init(
+                project=wandb_project or "ml-pipeline-experiments",
+                name=self.experiment_name,
+                config=self.config.to_dict()
+            )
         
         # Setup output directory
         self.output_dir = Path(self.config.get('output_dir', 'experiments')) / self.experiment_name

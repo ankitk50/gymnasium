@@ -1,3 +1,54 @@
-experiments/*
-wandb/*
-logs/*
+# Experiment outputs and results
+experiments/
+logs/
+results/
+runs/
+
+# WandB data
+wandb/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Model artifacts (optional - uncomment if you don't want to track models)
+# *.pt
+# *.pth
+# *.h5
+# *.pkl

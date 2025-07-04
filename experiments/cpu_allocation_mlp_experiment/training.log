@@ -236,3 +236,30 @@
 [2025-07-04 02:04:53,089] INFO - ml_pipeline - Early stopping at epoch 43
 [2025-07-04 02:04:53,092] INFO - ml_pipeline - Training completed in 49.27 seconds
 [2025-07-04 02:04:53,093] INFO - ml_pipeline - Training completed successfully!
+[2025-07-05 00:54:40,868] INFO - ml_pipeline - Configuration saved to experiments/cpu_allocation_mlp_experiment/config.yaml
+[2025-07-05 00:54:40,868] INFO - ml_pipeline - Initialized training pipeline for experiment: cpu_allocation_mlp_experiment
+[2025-07-05 00:54:40,868] INFO - ml_pipeline - Output directory: experiments/cpu_allocation_mlp_experiment
+[2025-07-05 00:54:40,868] INFO - ml_pipeline - Setting up model...
+[2025-07-05 00:54:40,869] INFO - ml_pipeline - Initialized model: cpu_allocation_mlp
+[2025-07-05 00:54:40,869] INFO - ml_pipeline - Model parameters: 11,777
+[2025-07-05 00:54:40,869] INFO - ml_pipeline -   name: cpu_allocation_mlp
+[2025-07-05 00:54:40,869] INFO - ml_pipeline -   input_shape: None
+[2025-07-05 00:54:40,870] INFO - ml_pipeline -   output_shape: None
+[2025-07-05 00:54:40,870] INFO - ml_pipeline -   num_parameters: 11777
+[2025-07-05 00:54:40,870] INFO - ml_pipeline -   device: cpu
+[2025-07-05 00:54:40,870] INFO - ml_pipeline - Setting up data loaders...
+[2025-07-05 00:54:40,926] INFO - ml_pipeline - Train loader: 219 batches
+[2025-07-05 00:54:40,926] INFO - ml_pipeline - Validation loader: 47 batches
+[2025-07-05 00:54:40,926] INFO - ml_pipeline - Test loader: 47 batches
+[2025-07-05 00:54:40,926] INFO - ml_pipeline - Starting model training...
+[2025-07-05 00:54:41,752] INFO - ml_pipeline - Starting training for 100 epochs
+[2025-07-05 00:54:41,753] INFO - ml_pipeline - Model has 11777 trainable parameters
+[2025-07-05 00:54:42,045] INFO - ml_pipeline - Epoch   0 | Train Loss: 0.0305 | Val Loss: 0.0270 | LR: 0.001000
+[2025-07-05 00:54:43,389] INFO - ml_pipeline - Epoch   1 | Train Loss: 0.0305 | Val Loss: 0.0270 | LR: 0.001000
+[2025-07-05 00:54:44,166] INFO - ml_pipeline - Epoch   2 | Train Loss: 0.0305 | Val Loss: 0.0269 | LR: 0.001000
+[2025-07-05 00:54:44,955] INFO - ml_pipeline - Epoch   3 | Train Loss: 0.0305 | Val Loss: 0.0271 | LR: 0.001000
+[2025-07-05 00:54:45,728] INFO - ml_pipeline - Epoch   4 | Train Loss: 0.0305 | Val Loss: 0.0271 | LR: 0.001000
+[2025-07-05 00:54:46,529] INFO - ml_pipeline - Epoch   5 | Train Loss: 0.0305 | Val Loss: 0.0269 | LR: 0.001000
+[2025-07-05 00:54:47,293] INFO - ml_pipeline - Epoch   6 | Train Loss: 0.0305 | Val Loss: 0.0270 | LR: 0.001000
+[2025-07-05 00:54:48,080] INFO - ml_pipeline - Epoch   7 | Train Loss: 0.0305 | Val Loss: 0.0269 | LR: 0.001000
+[2025-07-05 00:54:49,094] INFO - ml_pipeline - Epoch   8 | Train Loss: 0.0305 | Val Loss: 0.0270 | LR: 0.001000
