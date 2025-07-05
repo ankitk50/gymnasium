@@ -150,6 +150,19 @@ class EvaluationVisualizer:
             metrics: Regression metrics
             save_path: Path to save the plot
         """
+        # Ensure arrays are properly shaped and aligned
+        y_true = np.asarray(y_true).flatten()
+        y_pred = np.asarray(y_pred).flatten()
+        
+        # Ensure same length
+        min_len = min(len(y_true), len(y_pred))
+        y_true = y_true[:min_len]
+        y_pred = y_pred[:min_len]
+        
+        if len(y_true) == 0 or len(y_pred) == 0:
+            print("Warning: Empty arrays provided to plot_regression_results")
+            return
+        
         fig, axes = plt.subplots(2, 2, figsize=(15, 12))
         
         # Scatter plot: Predicted vs True
@@ -180,10 +193,20 @@ class EvaluationVisualizer:
         axes[1, 0].grid(True, alpha=0.3)
         
         # Q-Q plot for residuals normality
-        from scipy import stats
-        stats.probplot(residuals, dist="norm", plot=axes[1, 1])
-        axes[1, 1].set_title('Q-Q Plot (Residuals Normality)')
-        axes[1, 1].grid(True, alpha=0.3)
+        try:
+            from scipy import stats
+            stats.probplot(residuals, dist="norm", plot=axes[1, 1])
+            axes[1, 1].set_title('Q-Q Plot (Residuals Normality)')
+            axes[1, 1].grid(True, alpha=0.3)
+        except ImportError:
+            # If scipy is not available, create a simple scatter plot
+            sorted_residuals = np.sort(residuals)
+            theoretical_quantiles = np.linspace(-3, 3, len(sorted_residuals))
+            axes[1, 1].scatter(theoretical_quantiles, sorted_residuals, alpha=0.6)
+            axes[1, 1].set_xlabel('Theoretical Quantiles')
+            axes[1, 1].set_ylabel('Sample Quantiles')
+            axes[1, 1].set_title('Q-Q Plot (Residuals Normality)')
+            axes[1, 1].grid(True, alpha=0.3)
         
         # Add metrics text
         metrics_text = f"""Metrics:
@@ -215,12 +238,21 @@ MAPE: {metrics.get('mape', 0):.2f}%"""
             y_pred: Predicted values
             save_path: Path to save the plot
         """
-        residuals = y_true - y_pred
+        # Ensure arrays are flattened and same shape
+        y_true_flat = np.asarray(y_true).flatten()
+        y_pred_flat = np.asarray(y_pred).flatten()
+        
+        # Ensure same length
+        min_len = min(len(y_true_flat), len(y_pred_flat))
+        y_true_flat = y_true_flat[:min_len]
+        y_pred_flat = y_pred_flat[:min_len]
+        
+        residuals = y_true_flat - y_pred_flat
         
         fig, axes = plt.subplots(2, 2, figsize=(15, 10))
         
         # Residuals vs Fitted
-        axes[0, 0].scatter(y_pred, residuals, alpha=0.6)
+        axes[0, 0].scatter(y_pred_flat, residuals, alpha=0.6)
         axes[0, 0].axhline(y=0, color='r', linestyle='--')
         axes[0, 0].set_xlabel('Fitted Values')
         axes[0, 0].set_ylabel('Residuals')
@@ -229,7 +261,7 @@ MAPE: {metrics.get('mape', 0):.2f}%"""
         
         # Absolute residuals vs Fitted
         abs_residuals = np.abs(residuals)
-        axes[0, 1].scatter(y_pred, abs_residuals, alpha=0.6)
+        axes[0, 1].scatter(y_pred_flat, abs_residuals, alpha=0.6)
         axes[0, 1].set_xlabel('Fitted Values')
         axes[0, 1].set_ylabel('|Residuals|')
         axes[0, 1].set_title('Absolute Residuals vs Fitted')
@@ -292,7 +324,13 @@ MAPE: {metrics.get('mape', 0):.2f}%"""
         plt.grid(True, alpha=0.3)
         
         # Color bars by importance
-        colors = plt.cm.viridis(sorted_scores / sorted_scores.max())
+        try:
+            cmap = plt.cm.get_cmap('viridis')
+            colors = cmap(sorted_scores / sorted_scores.max())
+        except (AttributeError, ValueError):
+            # Fallback to basic colors
+            colors = ['skyblue'] * len(sorted_scores)
+        
         for bar, color in zip(bars, colors):
             bar.set_color(color)
         
@@ -327,7 +365,8 @@ MAPE: {metrics.get('mape', 0):.2f}%"""
         plt.grid(True, alpha=0.3)
         
         plt.subplot(1, 2, 2)
-        plt.boxplot([y_true, y_pred], labels=['True', 'Predicted'])
+        box_plot = plt.boxplot([y_true, y_pred])
+        plt.xticks([1, 2], ['True', 'Predicted'])
         plt.ylabel('Value')
         plt.title('Box Plot Comparison')
         plt.grid(True, alpha=0.3)

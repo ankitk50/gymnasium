@@ -11,6 +11,9 @@ from .core.pipeline import TrainingPipeline
 from .core.base_model import BaseModel
 from .core.trainer import Trainer
 from .core.evaluator import Evaluator
+from .core.inference import InferenceEngine
+from .core.validation import ModelValidator
+from .core.deployment import ModelDeploymentManager, InferenceServer
 
 # Utility imports
 from .utils.config import Config, create_default_config
@@ -40,6 +43,10 @@ __all__ = [
     'BaseModel', 
     'Trainer',
     'Evaluator',
+    'InferenceEngine',
+    'ModelValidator', 
+    'ModelDeploymentManager',
+    'InferenceServer',
     
     # Utilities
     'Config',

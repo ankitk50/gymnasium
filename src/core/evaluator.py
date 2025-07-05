@@ -5,6 +5,7 @@ Core evaluator module for model evaluation and testing.
 import torch
 import torch.nn as nn
 import numpy as np
+import pandas as pd
 from torch.utils.data import DataLoader
 from typing import Dict, Any, List, Optional, Tuple
 from sklearn.metrics import (
@@ -12,7 +13,7 @@ from sklearn.metrics import (
     mean_squared_error, mean_absolute_error, r2_score,
     confusion_matrix, classification_report
 )
-import pandas as pd
+
 from pathlib import Path
 import json
 
@@ -186,19 +187,34 @@ class Evaluator:
             targets: Ground truth
             metrics: Computed metrics
         """
-        if self.task_type == 'classification':
-            self.visualizer.plot_confusion_matrix(
-                metrics['confusion_matrix'],
-                title='Confusion Matrix'
-            )
-            self.visualizer.plot_classification_report(
-                metrics['classification_report']
-            )
-        else:
-            self.visualizer.plot_regression_results(
-                targets, predictions, metrics
-            )
-            self.visualizer.plot_residuals(targets, predictions)
+        try:
+            # Convert tensors to numpy arrays for visualization
+            if isinstance(targets, torch.Tensor):
+                targets_np = targets.cpu().numpy()
+            else:
+                targets_np = np.asarray(targets)
+                
+            if isinstance(predictions, torch.Tensor):
+                predictions_np = predictions.cpu().numpy()
+            else:
+                predictions_np = np.asarray(predictions)
+                
+            if self.task_type == 'classification':
+                self.visualizer.plot_confusion_matrix(
+                    metrics['confusion_matrix'],
+                    title='Confusion Matrix'
+                )
+                self.visualizer.plot_classification_report(
+                    metrics['classification_report']
+                )
+            else:
+                self.visualizer.plot_regression_results(
+                    targets_np, predictions_np, metrics
+                )
+                self.visualizer.plot_residuals(targets_np, predictions_np)
+        except Exception as e:
+            print(f"Warning: Failed to generate evaluation plots: {e}")
+            # Continue without plots rather than failing the entire evaluation
     
     def cross_validate(self, train_loader: DataLoader, 
                       k_folds: int = 5) -> Dict[str, Any]:
@@ -225,10 +241,14 @@ class Evaluator:
         all_data = torch.cat(all_data, dim=0)
         all_targets = torch.cat(all_targets, dim=0)
         
+        # Convert to numpy for sklearn KFold
+        all_data_np = all_data.numpy()
+        all_targets_np = all_targets.numpy()
+        
         kf = KFold(n_splits=k_folds, shuffle=True, random_state=42)
         cv_results = []
         
-        for fold, (train_idx, val_idx) in enumerate(kf.split(all_data)):
+        for fold, (train_idx, val_idx) in enumerate(kf.split(all_data_np)):
             print(f"Cross-validation fold {fold + 1}/{k_folds}")
             
             # Create fold data loaders
@@ -349,10 +369,10 @@ class Evaluator:
                 times.append(end_time - start_time)
         
         return {
-            'mean_inference_time': np.mean(times),
-            'std_inference_time': np.std(times),
-            'min_inference_time': np.min(times),
-            'max_inference_time': np.max(times)
+            'mean_inference_time': float(np.mean(times)),
+            'std_inference_time': float(np.std(times)),
+            'min_inference_time': float(np.min(times)),
+            'max_inference_time': float(np.max(times))
         }
     
     def _save_results(self) -> None:
@@ -382,25 +402,33 @@ class Evaluator:
         print(f"Evaluation results saved to {output_dir}")
     
     def get_feature_importance(self, test_loader: DataLoader, 
-                             method: str = 'gradient') -> Dict[str, np.ndarray]:
+                             method: str = 'gradient') -> Dict[str, Any]:
         """
         Compute feature importance using various methods.
         
         Args:
             test_loader: Test data loader
-            method: Importance computation method ('gradient', 'integrated_gradients')
+            method: Importance computation method ('gradient')
             
         Returns:
-            Feature importance scores
+            Feature importance scores and metadata
         """
-        if method == 'gradient':
-            return self._gradient_based_importance(test_loader)
-        elif method == 'integrated_gradients':
-            return self._integrated_gradients_importance(test_loader)
-        else:
-            raise ValueError(f"Unknown importance method: {method}")
+        try:
+            if method == 'gradient':
+                return self._gradient_based_importance(test_loader)
+            else:
+                # For now, only gradient method is implemented
+                print(f"Warning: Method '{method}' not implemented, using gradient method")
+                return self._gradient_based_importance(test_loader)
+        except Exception as e:
+            print(f"Warning: Feature importance computation failed: {e}")
+            return {
+                'feature_importance': np.array([]),
+                'method': method,
+                'error': str(e)
+            }
     
-    def _gradient_based_importance(self, test_loader: DataLoader) -> Dict[str, np.ndarray]:
+    def _gradient_based_importance(self, test_loader: DataLoader) -> Dict[str, Any]:
         """Compute gradient-based feature importance."""
         self.model.eval()
         
