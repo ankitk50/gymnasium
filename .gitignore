@@ -10,7 +10,7 @@ wandb/
 test_output/
 test_viz/
 # Python cache
-__pycache__/
+**/__pycache__/
 *.pyc
 *.pyo
 *.pyd

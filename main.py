@@ -227,7 +227,7 @@ def main():
                        help='Use Weights & Biases for logging')
     parser.add_argument('--wandb-project', type=str, default='gymnasium-ml-pipeline',
                        help='Wandb project name')
-    parser.add_argument('--setup-wandb-localhost', action='store_true',
+    parser.add_argument('--setup-wandb-localhost', action='store_true', default=True
                        help='Setup and configure Wandb for localhost operation')
     parser.add_argument('--start-wandb-server', action='store_true',
                        help='Start Wandb local server')
