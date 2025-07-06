@@ -3,7 +3,7 @@
 experiment_name: "cpu_allocation_transformer_experiment"
 task_type: "regression"
 device: "cpu"
-output_dir: "experiments"
+output_dir: "results"
 log_level: "INFO"
 
 # Data Configuration

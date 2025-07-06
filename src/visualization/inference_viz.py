@@ -19,7 +19,7 @@ class InferenceVisualizer:
     Visualizer for model inference results and real-time monitoring.
     """
     
-    def __init__(self, output_dir: str = 'experiments'):
+    def __init__(self, output_dir: str = 'results'):
         """
         Initialize the inference visualizer.
         

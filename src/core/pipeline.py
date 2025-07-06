@@ -75,7 +75,7 @@ class TrainingPipeline:
             )
         
         # Setup output directory
-        self.output_dir = Path(self.config.get('output_dir', 'experiments')) / self.experiment_name
+        self.output_dir = Path(self.config.get('output_dir', 'results')) / self.experiment_name
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
         # Setup logging

@@ -36,7 +36,7 @@ class ModelDeploymentManager:
     def __init__(self,
                  model: BaseModel,
                  config: Optional[Dict[str, Any]] = None,
-                 output_dir: str = 'deployment_output'):
+                 output_dir: str = 'results/deployment'):
         """
         Initialize the deployment manager.
         

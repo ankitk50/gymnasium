@@ -159,7 +159,7 @@ def demonstrate_inference_framework():
     print("🔮 INFERENCE ENGINE DEMONSTRATION")
     print("=" * 60)
     
-    inference_engine = InferenceEngine(model, config, 'demo_output/inference')
+    inference_engine = InferenceEngine(model, config, 'results/demo/inference')
     
     # Set reference statistics
     print("\n📈 Setting reference statistics for drift detection...")
@@ -212,7 +212,7 @@ def demonstrate_inference_framework():
     print("🔍 MODEL VALIDATION DEMONSTRATION")
     print("=" * 60)
     
-    validator = ModelValidator(model, config, 'demo_output/validation')
+    validator = ModelValidator(model, config, 'results/demo/validation')
     
     # Data quality validation
     print("\n🔎 Validating data quality...")
@@ -271,7 +271,7 @@ def demonstrate_inference_framework():
     print("🚀 DEPLOYMENT MANAGER DEMONSTRATION")
     print("=" * 60)
     
-    deployment_manager = ModelDeploymentManager(model, config, 'demo_output/deployment')
+    deployment_manager = ModelDeploymentManager(model, config, 'results/demo/deployment')
     
     # Prepare for deployment
     print("\n📋 Preparing model for deployment...")
@@ -358,14 +358,14 @@ def demonstrate_inference_framework():
     
     # Export as PyTorch
     torch_export = inference_engine.export_inference_model(
-        'demo_output/exports/torch', 'torch', include_metadata=True
+        'results/demo/exports/torch', 'torch', include_metadata=True
     )
     print(f"   PyTorch export: {torch_export}")
     
     # Export as TorchScript
     try:
         torchscript_export = inference_engine.export_inference_model(
-            'demo_output/exports/torchscript', 'torchscript', include_metadata=True
+            'results/demo/exports/torchscript', 'torchscript', include_metadata=True
         )
         print(f"   TorchScript export: {torchscript_export}")
     except Exception as e:
@@ -382,7 +382,7 @@ def demonstrate_inference_framework():
     
     print("\n🎉 DEMO COMPLETED SUCCESSFULLY!")
     print("=" * 60)
-    print(f"📁 Output files saved to: demo_output/")
+    print(f"📁 Output files saved to: results/demo/")
     print("📋 Check the generated reports and visualizations")
     print("🚀 Framework ready for production use!")
 

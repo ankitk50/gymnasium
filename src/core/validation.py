@@ -38,7 +38,7 @@ class ModelValidator:
     def __init__(self, 
                  model: BaseModel,
                  config: Optional[Dict[str, Any]] = None,
-                 output_dir: str = 'validation_output'):
+                 output_dir: str = 'results/validation'):
         """
         Initialize the model validator.
         

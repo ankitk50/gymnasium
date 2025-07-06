@@ -31,7 +31,7 @@ class InferenceEngine:
     def __init__(self, 
                  model: BaseModel,
                  config: Optional[Dict[str, Any]] = None,
-                 output_dir: str = 'inference_output'):
+                 output_dir: str = 'results/inference'):
         """
         Initialize the inference engine.
         

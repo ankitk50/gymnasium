@@ -19,7 +19,7 @@ class TrainingVisualizer:
     Visualizer for training metrics and progress.
     """
     
-    def __init__(self, output_dir: str = 'experiments'):
+    def __init__(self, output_dir: str = 'results'):
         """
         Initialize the training visualizer.
         

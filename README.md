@@ -56,8 +56,15 @@ gymnasium/
 │   ├── train_with_wandb.py     # Training with WandB
 │   └── ...                     # Other WandB utilities
 ├── notebooks/                  # Jupyter notebooks for analysis
-├── experiments/                # Experiment outputs (gitignored)
-├── logs/                       # Training logs (gitignored)
+├── results/                    # Unified output directory (gitignored)
+│   ├── <experiment_name>/      # Individual experiment folders
+│   │   ├── models/            # Trained models and checkpoints
+│   │   ├── logs/              # Training and validation logs
+│   │   ├── visualizations/    # Generated plots and charts
+│   │   └── metrics/           # Performance metrics and summaries
+│   ├── inference/             # Inference results and monitoring
+│   ├── validation/            # Model validation reports
+│   └── deployment/            # Deployment artifacts and monitoring
 ├── inference_validation_demo.py # 🎯 Framework demonstration
 └── test_framework.py           # 🧪 Framework tests
 ```
@@ -76,7 +83,7 @@ python src/main.py --config_name=cpu_allocation
 
 3. View results in TensorBoard:
 ```bash
-tensorboard --logdir experiments/
+tensorboard --logdir results/
 ```
 
 For more detailed setup instructions, see `docs/QUICKSTART.md`.

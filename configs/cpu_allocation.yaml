@@ -3,7 +3,7 @@
 experiment_name: "cpu_allocation_mlp_experiment"
 task_type: "regression"
 device: "cpu"  # Change to "cuda" if GPU is available
-output_dir: "experiments"
+output_dir: "results"
 log_level: "INFO"
 
 # Data Configuration

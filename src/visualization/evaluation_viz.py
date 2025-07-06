@@ -20,7 +20,7 @@ class EvaluationVisualizer:
     Visualizer for model evaluation results.
     """
     
-    def __init__(self, output_dir: str = 'experiments'):
+    def __init__(self, output_dir: str = 'results'):
         """
         Initialize the evaluation visualizer.
         
